@@ -13,11 +13,11 @@ function App() {
         <Router>
             <Suspense fallback={<p>Loading...</p>}>
                 <Switch>
-                    <Route path={ROUTES.LOGIN} component={Login}></Route>
-                    <Route path={ROUTES.SIGN_UP} component={SignUp}></Route>
-                    <Route path={ROUTES.PROFILE} component={Profile}></Route>
-                    <Route path={ROUTES.NOT_FOUND} component={NotFound}></Route>
-                    <Route path={ROUTES.DASHBOARD} component={Dashboard}></Route>
+                    <Route path={ROUTES.LOGIN} component={Login} />
+                    <Route path={ROUTES.SIGN_UP} component={SignUp} />
+                    <Route path={ROUTES.PROFILE} component={Profile} />
+                    <Route path={ROUTES.DASHBOARD} component={Dashboard} exact />
+                    <Route component={NotFound} />
                 </Switch>
             </Suspense>
         </Router>

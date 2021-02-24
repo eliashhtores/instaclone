@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import * as ROUTES from '../constants/routes'
+import doesUsernameExist from '../services/firebase'
 
 const SignUp = () => {
     const history = useHistory()
-
     useEffect(() => {
         document.title = 'Sing Up - Instaclone'
     }, [])
@@ -23,16 +23,37 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
         e.preventDefault()
 
-        try {
-            const created = await firebase.auth().createUserWithEmailAndPassword(emailAddress, password)
-            console.log(created)
-            history.push(ROUTES.DASHBOARD)
-        } catch (error) {
+        const usernameExist = await doesUsernameExist(username)
+
+        if (!usernameExist.length) {
+            try {
+                const createdUserResult = await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(emailAddress, password)
+                await createdUserResult.user.updateProfile({
+                    displayName: username,
+                })
+
+                await firebase.firestore().collection('users').add({
+                    userId: createdUserResult.user.uid,
+                    username: username.toLowerCase(),
+                    fullName,
+                    emailAddress: emailAddress.toLowerCase(),
+                    following: [],
+                    followers: [],
+                    dateCreated: Date.now(),
+                })
+
+                history.push(ROUTES.DASHBOARD)
+            } catch (error) {
+                setError(error.message)
+            }
+        } else {
             setUsername('')
             setFullName('')
             setEmailAddress('')
             setPassword('')
-            setError(error.message)
+            setError('That username is already taken, please try another')
         }
     }
 
@@ -83,8 +104,9 @@ const SignUp = () => {
                         <button
                             disabled={isInvalid}
                             type="submit"
-                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${isInvalid && 'opacity-50'
-                                }`}
+                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${
+                                isInvalid && 'opacity-50'
+                            }`}
                         >
                             Sign Up
                         </button>
