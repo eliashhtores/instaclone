@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import FirebaseContext from '../context/firebase'
 import * as ROUTES from '../constants/routes'
 
 const SignUp = () => {
+    const history = useHistory()
+
     useEffect(() => {
         document.title = 'Sing Up - Instaclone'
     }, [])
+
+    const { firebase } = useContext(FirebaseContext)
 
     const [username, setUsername] = useState('')
     const [fullName, setFullName] = useState('')
@@ -15,6 +20,22 @@ const SignUp = () => {
     const isInvalid = username === '' || fullName === '' || password === '' || emailAddress === ''
     const [error, setError] = useState('')
 
+    const handleSignUp = async (e) => {
+        e.preventDefault()
+
+        try {
+            const created = await firebase.auth().createUserWithEmailAndPassword(emailAddress, password)
+            console.log(created)
+            history.push(ROUTES.DASHBOARD)
+        } catch (error) {
+            setUsername('')
+            setFullName('')
+            setEmailAddress('')
+            setPassword('')
+            setError(error.message)
+        }
+    }
+
     return (
         <div className="container flex mx-auto max-w-xs items-center h-screen">
             <div className="flex flex-col">
@@ -22,7 +43,9 @@ const SignUp = () => {
                     <h1 className="flex justify-center w-full">
                         <img src="/images/logo.png" alt="Instaclone" className="mt-2 w-6/12 mb-4" />
                     </h1>
-                    <form method="post">
+                    {error && <p className="mb-4 text-xs text-red-500">{error}</p>}
+
+                    <form method="post" onSubmit={handleSignUp}>
                         <input
                             aria-label="Enter your username"
                             className="text-sm text-gray w-full mr-3 py-5 px-4 h-2 border bg-gray-background rounded mb-2"
@@ -60,9 +83,8 @@ const SignUp = () => {
                         <button
                             disabled={isInvalid}
                             type="submit"
-                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${
-                                isInvalid && 'opacity-50'
-                            }`}
+                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${isInvalid && 'opacity-50'
+                                }`}
                         >
                             Sign Up
                         </button>

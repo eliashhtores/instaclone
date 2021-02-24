@@ -48,7 +48,7 @@ const Login = () => {
                             type="text"
                             placeholder="Email address"
                             value={emailAddress}
-                            onChange={({ target }) => setEmailAddress(target.value)}
+                            onChange={({ target }) => setEmailAddress(target.value.toLowerCase().trim())}
                         />
                         <input
                             aria-label="Enter your password"
@@ -61,9 +61,8 @@ const Login = () => {
                         <button
                             disabled={isInvalid}
                             type="submit"
-                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${
-                                isInvalid && 'cursor-not-allowed opacity-50'
-                            }`}
+                            className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${isInvalid && 'cursor-not-allowed opacity-50'
+                                }`}
                         >
                             Log In
                         </button>
