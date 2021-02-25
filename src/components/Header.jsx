@@ -2,13 +2,11 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import * as ROUTES from '../constants/routes'
 import FirebaseContext from '../context/firebase'
+import UserContext from '../context/user'
 
 const Header = () => {
     const { firebase } = useContext(FirebaseContext)
-    const user =
-    {
-        displayName: "elias"
-    }
+    const { user } = useContext(UserContext)
 
     return (
         <header className="h-16 bg-white border-b mb-8">
@@ -17,7 +15,11 @@ const Header = () => {
                     <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
                         <h1>
                             <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
-                                <img src="/images/logo.png" alt="Instagram" className="mt-2 w-6/12" />
+                                <img
+                                    src="/images/logo.png"
+                                    alt="Instagram"
+                                    className="mt-2 w-6/12"
+                                />
                             </Link>
                         </h1>
                     </div>
@@ -46,7 +48,7 @@ const Header = () => {
                                     onClick={() => firebase.auth().signOut()}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
-                                            firebase.auth().signOut();
+                                            firebase.auth().signOut()
                                         }
                                     }}
                                 >
@@ -76,23 +78,25 @@ const Header = () => {
                                 </div>
                             </>
                         ) : (
-                                <>
-                                    <Link to={ROUTES.LOGIN}>
-                                        <button
-                                            type="button"
-                                            className="bg-blue-500 font-bold text-sm rounded text-white w-20 h-8"                                        >
-                                            Log In
+                            <>
+                                <Link to={ROUTES.LOGIN}>
+                                    <button
+                                        type="button"
+                                        className="bg-blue-500 font-bold text-sm rounded text-white w-20 h-8"
+                                    >
+                                        Log In
                                     </button>
-                                    </Link>
-                                    <Link to={ROUTES.SIGN_UP}>
-                                        <button
-                                            type="button"
-                                            className="font-bold text-sm rounded text-blue w-20 h-8"                                        >
-                                            Sign Up
+                                </Link>
+                                <Link to={ROUTES.SIGN_UP}>
+                                    <button
+                                        type="button"
+                                        className="font-bold text-sm rounded text-blue w-20 h-8"
+                                    >
+                                        Sign Up
                                     </button>
-                                    </Link>
-                                </>
-                            )}
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
