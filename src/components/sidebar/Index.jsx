@@ -1,7 +1,8 @@
 import React from 'react'
+import useUser from '../../hooks/use-user'
 
-const Index = () => {
-    return <div>I'm the sidebar</div>
+export default function Sidebar() {
+    const { user: { docId } } = useUser()
+    console.log(docId)
+    return (<p>I am the sidebar</p>)
 }
-
-export default Index
