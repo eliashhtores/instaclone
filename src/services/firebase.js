@@ -1,4 +1,6 @@
-import { firebase } from '../lib/firebase'
+import {
+    firebase
+} from '../lib/firebase'
 
 const doesUsernameExist = async (username) => {
     const result = await firebase
@@ -25,4 +27,19 @@ export async function getUserByUserId(userId) {
     }))
 
     return user
+}
+
+export async function getSuggestedProfiles(userId, following) {
+    const result = await firebase
+        .firestore()
+        .collection('users')
+        .limit(10)
+        .get()
+
+    return result.docs
+        .map((user) => ({
+            ...user.data(),
+            docId: user.id
+        }))
+        .filter((profile) => profile.userId !== userId && !following.includes(profile.userId))
 }
