@@ -23,6 +23,18 @@ const Suggestions = ({ userId, following }) => {
             <div className="text-sm flex items-center align-items justify-between mb-2">
                 <p className="font-bold text-gray-base">Suggestions for you</p>
             </div>
+            <div className="mt-4 grid gap-5">
+                {profiles.map((profile) => (
+                    <SuggestedProfile
+                        key={profile.docId}
+                        userDocId={profile.docId}
+                        username={profile.username}
+                        profileId={profile.userId}
+                        username={profile.username}
+                        userId={profile.userId}
+                    />
+                ))}
+            </div>
         </div>
     ) : null
 }
