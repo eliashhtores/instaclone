@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Skeleton from 'react-loading-skeleton'
 import { getSuggestedProfiles } from '../../services/firebase'
+import SuggestedProfile from './SuggestedProfile'
 
 const Suggestions = ({ userId, following }) => {
     const [profiles, setProfiles] = useState(null)
@@ -30,7 +31,6 @@ const Suggestions = ({ userId, following }) => {
                         userDocId={profile.docId}
                         username={profile.username}
                         profileId={profile.userId}
-                        username={profile.username}
                         userId={profile.userId}
                     />
                 ))}
