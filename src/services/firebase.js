@@ -1,4 +1,5 @@
 import {
+    FieldValue,
     firebase
 } from '../lib/firebase'
 
@@ -42,4 +43,31 @@ export async function getSuggestedProfiles(userId, following) {
             docId: user.id
         }))
         .filter((profile) => profile.userId !== userId && !following.includes(profile.userId))
+}
+
+// updateFollowedUserFollowers
+export async function updateLoggedInUserFollowing(
+    loggedInUserDocId, // Currently logged in user docId
+    profileId, // The user that I want to follow
+    isFollowingProfile // True/False (Am I currently following this user?)
+) {
+
+    return firebase.firestore().collection('users').doc(loggedInUserDocId).update({
+        following: isFollowingProfile
+            ? FieldValue.arrayRemove(profileId)
+            : FieldValue.arrayUnion(profileId)
+    })
+}
+
+export async function updateFollowedUserFollowers(
+    spDocId, // Suggested Profile docId
+    userId, // Currently logged in userId
+    isFollowingProfile // True/False (Am I currently following this user?)
+) {
+
+    return firebase.firestore().collection('users').doc(spDocId).update({
+        followers: isFollowingProfile
+            ? FieldValue.arrayRemove(userId)
+            : FieldValue.arrayUnion(userId)
+    })
 }
